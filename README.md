@@ -7,6 +7,11 @@ https://user-images.githubusercontent.com/66648349/146699835-4f572bf3-03d7-4648-
 The overall process of generating the simulation is as the following:
 
 1. First, define the coordinate system (**q = [x<sub>b</sub>, y<sub>b</sub>, x<sub>j</sub>, y<sub>j</sub>, θ<sub>b</sub>, θ<sub>j</sub>]**), frames (jack frame, box frame, and a fixed world frame), and the frames’ relative transformation matrices **G<sub>wj</sub>** (transforms jack coordinates to world coordinate) and **G<sub>wb</sub>** (transforms box coordinate to world coordinate). The jack and box frames have origins at the center of mass (CoM) of both these objects. A diagram of the system can be seen in the image below:
+
+<p align="center">
+  <img src="frame_diagram.png" alt="System Diagram"/>
+</p>
+
 2. Define the total kinetic energy (**KE**) and potential energy (**PE**) of the system (jack + box).
 3. Calculate the [Lagrangian](https://en.wikipedia.org/wiki/Lagrangian_mechanics#The_Lagrangian) (**KE-PE**).
 4. Derive the forced [Euler-Lagrange](https://en.wikipedia.org/wiki/Euler%E2%80%93Lagrange_equation#Statement) (EL) equations to simulate the trajectory of the jack and the box when it is not actively impacting. Forces in the x<sub>b</sub> and y<sub>b</sub> direction are added here to “shake up” the box.
