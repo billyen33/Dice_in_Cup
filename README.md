@@ -12,10 +12,27 @@ The overall process of generating the simulation is as the following:
   <img src="frame_diagram.png" alt="System Diagram"/>
 </p>
 
-2. Define the total kinetic energy (**KE**) and potential energy (**PE**) of the system (jack + box).
-3. Calculate the [Lagrangian](https://en.wikipedia.org/wiki/Lagrangian_mechanics#The_Lagrangian) (**KE-PE**).
-4. Derive the forced [Euler-Lagrange](https://en.wikipedia.org/wiki/Euler%E2%80%93Lagrange_equation#Statement) (EL) equations to simulate the trajectory of the jack and the box when it is not actively impacting. Forces in the x<sub>b</sub> and y<sub>b</sub> direction are added here to “shake up” the box.
+2. Define the total kinetic energy (**KE**) and potential energy (**PE**) of the system (jack + box). **M** here is defined as the 6x6 three dimensional inertia matrix of the object (note that only inertia about z is being considered here since the simulation is two dimensional) and **V<sup>b</sup>**=<img src="https://render.githubusercontent.com/render/math?math=(G^{-1} \dot{G})^v"> where the superscript v represents taking the skew-symmetric form of the vector and **G** represents the transformation matrix (could be G<sub>wb</sub> or G<sub>wj</sub> depending on whether one is determining the KE of the jack or box.). **m** is simply the mass of the object and **g** is the gravity scalar 9.8 m/s<sup>2</sup>.
+<p align="center">
+  <img src="https://render.githubusercontent.com/render/math?math=KE = (\frac{1}{2} V^{b^{T}}_{box} M_{box} V^b_{box}) %2B (\frac{1}{2} V^{b^{T}}_{jack} M_{jack} V^b_{jack})">
+</p>
+<p align="center">
+  <img src="https://render.githubusercontent.com/render/math?math=PE = (m_{box}g G_{wj}*[0, 0, 0, 1]^T %2B M_{box}g G_{wb}*[0, 0, 0, 1]^T) %2B (m_{jack}g G_{wj}*[0, 0, 0, 1]^T %2B M_{jack}g G_{wb}*[0, 0, 0, 1]^T)">
+</p>
+
+4. Calculate the [Lagrangian](https://en.wikipedia.org/wiki/Lagrangian_mechanics#The_Lagrangian) (<img src="https://render.githubusercontent.com/render/math?math=L = KE-PE">).
+5. Derive the forced [Euler-Lagrange](https://en.wikipedia.org/wiki/Euler%E2%80%93Lagrange_equation#Statement) (EL) equations to simulate the trajectory of the jack and the box when it is not actively impacting. Forces in the x<sub>b</sub> and y<sub>b</sub> direction are added here to “shake up” the box. The equations are shown below where F is a 6-vector consisting of F<sub>x</sub>, F<sub>y</sub>, and zeros:
+
+<p align="center">
+  <img src="https://render.githubusercontent.com/render/math?math=\frac{\d}{\d t}\ \frac{\partial L}{\partial \dot{q}}\-\frac{\partial L}{\partial q}\ = F">
+</p>
+
 5. Calculate the [Hamiltonian](https://en.wikipedia.org/wiki/Hamiltonian_mechanics#From_Euler-Lagrange_equation_to_Hamilton's_equations) of the system, which is a conserved value in any dynamic system. The Hamiltonian will be used to derive the impact update equations and can also be plotted with respect to time to examine if the simulation is correct. A correct simulation should always conserve the Hamiltonian regardless of whether it’s an open or closed system.
+
+<p align="center">
+  <img src="https://render.githubusercontent.com/render/math?math=H = \frac{\partial L}{\partial \dot{q}}\dot{q}-L(q,\dot{q})">
+</p>
+
 6. Define the impact conditions. Since the probability of having the face of the jack hit the wall of the box (e.g. two corners of the jack hitting at once) is exceedingly low, an “impact” is defined as any time any of the 4 corners of the jack hits any of the four walls of the box (with some tolerance built in to account for numerical integration making the jack “miss”). This results in 16 different impact conditions that the simulation continuously checks for at each time step (**dt**).
 7. Derive 16 sets of impact update equations (one corresponding to each impact condition), which change the velocities of the system (**dq/dt**) post impact to make the jack and the box bounce off each other. Note that only the solution that generates a non-zero lambda value will be used, since a lambda of zero will generate a trivial solution that results in the jack going right through the wall of the box. **q<sup>+</sup>** and **dq<sup>+</sup>/dt** (the positions and velocities of the system after impact) are defined as dummy variables symbolically to make them distinct from q and dq/dt (the positions and velocities of the system before impact).
 8. Define the desired dt, duration, and initial condition of the simulation. Some tuning is required to find the right balance between the tolerance defined in Step 5 and dt to make sure that the jack does not bounce off too early/late and that the calculation time is not too long. Use these to generate the trajectory of the two objects over time (**q(t)**).
