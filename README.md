@@ -17,7 +17,7 @@ The overall process of generating the simulation is as the following:
   <img src="https://render.githubusercontent.com/render/math?math=KE = (\frac{1}{2} V^{b^{T}}_{box} M_{box} V^b_{box}) %2B (\frac{1}{2} V^{b^{T}}_{jack} M_{jack} V^b_{jack})">
 </p>
 <p align="center">
-  <img src="https://render.githubusercontent.com/render/math?math=PE = (m_{box}g G_{wj}*[0, 0, 0, 1]^T %2B M_{box}g G_{wb}*[0, 0, 0, 1]^T) %2B (m_{jack}g G_{wj}*[0, 0, 0, 1]^T %2B M_{jack}g G_{wb}*[0, 0, 0, 1]^T)">
+  <img src="https://render.githubusercontent.com/render/math?math=PE = (m_{jack}g G_{wj}*[0, 0, 0, 1]^T) %2B (m_{box}g G_{wb}*[0, 0, 0, 1]^T)">
 </p>
 
 3. Calculate the [Lagrangian](https://en.wikipedia.org/wiki/Lagrangian_mechanics#The_Lagrangian) (<img src="https://render.githubusercontent.com/render/math?math=L = KE-PE">).
